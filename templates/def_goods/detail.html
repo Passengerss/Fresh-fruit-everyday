@@ -1,0 +1,224 @@
+{%extends 'def_goods/base.html'%}
+{%block middle%}
+	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript">
+		function add() {
+			var number = parseInt($(".num_show").val());
+			$(".num_show").val(number+1);
+			$(".num_show").blur();
+        }
+        add();
+        //			$(".add").bind("click",add());
+
+
+        function reduce() {
+			var number = parseInt($(".num_show").val());
+			if(number >= 1){
+			    $(".num_show").val(number-1);
+			}
+			else {
+			    return;
+			}
+			$(".num_show").blur();
+        }
+        reduce();
+		//			$(".minus").bind("click",reduce());
+
+
+        $(function () {
+            $(".num_show").blur(function () {
+				total = parseInt($(".num_show").val());
+				price_per = parseFloat($(".show_pirze em ").text());
+				result = parseFloat(total*price_per);
+				$("#total").html(result.toFixed(2)+"元");	//# toFixed(2) 为留两位小数
+
+            });
+
+        });
+
+	</script>
+	<script type="text/javascript">
+		$(function () {
+		    var btn = $(".detail_tab li");
+		    var btn1 = $(".r_wrap div");
+		    for(var i=0;i<btn.length;i++){
+				(function (i) {
+					btn[i].onclick = function () {
+		            for(var j=0;j<btn.length;j++){
+		                btn[j].className='';
+		                btn1[j].className="";
+		                btn1[j].id="noactive"
+					}
+					this.className="active";
+					btn1[i].className="tab_content";
+					btn1[i].id=""
+                };
+                })(i);
+			}
+        });
+	</script>
+    <!-- 评论区与商品详情-->
+	<style type="text/css">
+		.r_wrap div#noactive{
+			display: none;
+		}
+	</style>
+
+	<div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>	
+				<span></span>			
+				<ul class="subnav">
+					<li><a href="/user/list1_1_1" class="fruit">新鲜水果</a></li>
+					<li><a href="/user/list2_1_1" class="seafood">海鲜水产</a></li>
+					<li><a href="/user/list3_1_1" class="meet">猪牛羊肉</a></li>
+					<li><a href="/user/list4_1_1" class="egg">禽类蛋品</a></li>
+					<li><a href="/user/list5_1_1" class="vegetables">新鲜蔬菜</a></li>
+					<li><a href="/user/list6_1_1" class="ice">速冻食品</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="/user/index">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="#">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="#">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="breadcrumb">
+		<a href="/user/index">全部分类</a>
+		<span>></span>
+		<a href="/user/list{{goods.gtype.id}}_1_1">{{ttitle}}</a>
+		<span>></span>
+		<a href="">商品详情</a>
+	</div>
+
+	<div class="goods_detail_con clearfix">
+		<div class="goods_detail_pic fl" ><img src="/static/{{goods.gpic}}" style="width: 360px;height: 360px;"></div>
+
+		<div class="goods_detail_list fr">
+			<h3>{{goods.gname}}</h3>
+			<p>{{goods.gjianjie}}</p>
+			<div class="prize_bar">
+				<span class="show_pirze">¥<em id="gprice">{{goods.gprice}}</em></span>
+				<span class="show_unit">单  位：{{goods.gdanwei}}</span>
+			</div>
+			<div class="goods_num clearfix">
+				<div class="num_name fl" >数 量：</div>
+				<div class="num_add fl">
+					<input type="text" class="num_show fl" value="1">
+					<a href="javascript:add();" class="add fr">+</a>
+					<a href="javascript:reduce();" class="minus fr">-</a>
+				</div>
+					<div class="kucun" style="font-size:16px;color:red;height: 52px;line-height:50px;padding-left:50px;overflow:hidden">库存数量：{{goods.gkucun}}</div>
+			</div>
+			<div class="total">总价：<em id="total">{{goods.gprice}}元</em></div>
+			<div class="operate_btn">
+				<a href="javascript:;" class="buy_btn">立即购买</a>
+				<a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>新品推荐</h3>
+				<ul>
+					{% for each in news %}
+					<li>
+						<a href="/user/{{each.id}}"><img src="/static/{{each.gpic}}"></a>
+						<h4><a href="#">{{each.gname}}</a></h4>
+						<div class="prize">￥{{each.gprice}}</div>
+					</li>
+					{% endfor%}
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<ul class="detail_tab clearfix">
+				<li class="active">商品介绍</li>
+				<li class="">评论</li>
+			</ul>
+
+			<div class="tab_content" id="">
+				<dl>
+					<dt>商品详情：</dt>
+					<dd>{{goods.gdescribe}}{#goods.gdescribe|safe#}</dd>
+				</dl>
+			</div>
+			<div class="" id="noactive">
+				<dl>
+					<dt>累计评论：</dt>
+					<dd>暂无任何评价！</dd>
+				</dl>
+			</div>
+
+		</div>
+	</div>
+
+
+	<div class="add_jump"></div>
+
+	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript">
+		var $add_x = $('#add_cart').offset().top;
+		var $add_y = $('#add_cart').offset().left;
+
+		var $to_x = $('#show_count').offset().top;
+		var $to_y = $('#show_count').offset().left;
+
+		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'});
+
+		$('#add_cart').click(function(){
+            if($(".login_btn").attr("title")==="success"){
+//                if (parseInt($('#show_count').text()) === 0){
+//					$.get("/car/add_to_car0_0", function (data) {
+//						$('#show_count').html(data.count);
+//					});
+//        		}else{
+                    add_to();
+                    donghua();
+//				}
+
+            }
+        });
+
+		// 动画效果
+        function donghua() {
+            $(".add_jump").stop().animate({
+                    'left': $to_y+7,
+                    'top': $to_x+7},
+                    "fast", function() {
+                        $(".add_jump").fadeOut('fast',function(){});
+    //					$('#show_count').html($(".num_show").val());
+                });
+        }
+        // 异步
+        // 先加载购物车已有的商品数量
+        if (parseInt($('#show_count').text()) === 0){
+            $.get("/car/add_to_car0_0", function (data) {
+                $('#show_count').html(data.count);
+            });
+        }
+        // 异步加载点击量
+        function add_to() {
+            num = parseInt($(".num_show").val());
+            $.get("/car/add_to_car{{goods.id}}_" + num, function (data) {
+                $('#show_count').html(data.count);
+            });
+        }
+
+        $(".buy_btn").click(function () {
+            num = parseInt($(".num_show").val());
+			$.get("/car/add_to_car{{goods.id}}_" + num,function () {
+				location.href = "/car/info/car/";
+            })
+        })
+
+	</script>
+{%endblock middle%}

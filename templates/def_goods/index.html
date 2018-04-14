@@ -1,0 +1,258 @@
+{%extends 'def_goods/base.html'%}
+{%block head%}
+	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/static/js/slide.js"></script>
+	<script type="text/javascript">
+        // 异步
+        // 先加载购物车已有的商品数量
+//		alert($(".fr div.login_btn").attr("title"));
+//		if($(".login_btn").attr("title") === "success") {
+            if (parseInt($('#show_count').text()).NaN = true){
+            	$.get("/car/add_to_car0_0", function (data) {
+                	$('#show_count').html(data.count);
+            	});
+        	}
+//        }
+	</script>
+{%endblock head%}
+
+{%block middle%}
+	<div class="navbar_con">
+		<div class="navbar">
+			<h1 class="fl">全部商品分类</h1>
+			<ul class="navlist fl">
+				<li><a href="">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="center_con clearfix">
+		<ul class="subnav fl">
+			<li><a href="/user/list1_1_1" class="fruit">新鲜水果</a></li>
+			<li><a href="/user/list2_1_1" class="seafood">海鲜水产</a></li>
+			<li><a href="/user/list3_1_1" class="meet">猪牛羊肉</a></li>
+			<li><a href="/user/list4_1_1" class="egg">禽类蛋品</a></li>
+			<li><a href="/user/list5_1_1" class="vegetables">新鲜蔬菜</a></li>
+			<li><a href="/user/list6_1_1" class="ice">速冻食品</a></li>
+		</ul>
+		<div class="slide fl">
+			<ul class="slide_pics">
+				<li><img src="/static/images/slide.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide02.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide03.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide04.jpg" alt="幻灯片"></li>
+			</ul>
+			<div class="prev"></div>
+			<div class="next"></div>
+			<ul class="points"></ul>
+		</div>
+		<div class="adv fl">
+			<a href="#"><img src="/static/images/adv01.jpg"></a>
+			<a href="#"><img src="/static/images/adv02.jpg"></a>
+		</div>
+	</div>
+
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model01">{{typelist.0}}</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for hot in type00 %}
+				{% if hot.gname|length <= 4 %}
+				<a href="/user/{{hot.id}}">{{hot.gname}}</a>
+				{% else %}
+				<a href="/user/{{hot.id}}">{{hot.gname|slice:"4"}}...</a>
+				{% endif %}
+                {% endfor%}
+			</div>
+			<a href="/user/list1_1_1" class="goods_more fr" id="fruit_more">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner01.jpg"></div>
+			<ul class="goods_list fl">
+                {% for new in type0 %}
+				<li>
+					<h4><a href="/user/{{new.id}}">{{new.gname}}</a></h4>
+					<a href="/user/{{new.id}}"><img src="/static/{{new.gpic}}"></a>
+					<div class="prize">¥ {{new.gprice}}</div>
+				</li>
+                {%endfor%}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model02">{{typelist.1}}</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for hot in type11 %}
+				{% if hot.gname|length <= 4 %}
+				<a href="/user/{{hot.id}}">{{hot.gname}}</a>
+				{% else %}
+				<a href="/user/{{hot.id}}">{{hot.gname|slice:"4"}}...</a>
+				{% endif %}
+                {% endfor%}
+			</div>
+			<a href="/user/list2_1_1" class="goods_more fr" id="fruit_more">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner02.jpg"></div>
+			<ul class="goods_list fl">
+                {% for new in type1 %}
+				<li>
+					<h4><a href="/user/{{new.id}}">{{new.gname}}</a></h4>
+					<a href="/user/{{new.id}}"><img src="/static/{{new.gpic}}"></a>
+					<div class="prize">¥ {{new.gprice}}</div>
+				</li>
+                {%endfor%}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model03">{{typelist.2}}</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for hot in type22 %}
+				{% if hot.gname|length <= 4 %}
+				<a href="/user/{{hot.id}}">{{hot.gname}}</a>
+				{% else %}
+				<a href="/user/{{hot.id}}">{{hot.gname|slice:"4"}}...</a>
+				{% endif %}
+                {% endfor%}
+			</div>
+			<a href="/user/list3_1_1" class="goods_more fr" id="fruit_more">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner03.jpg"></div>
+			<ul class="goods_list fl">
+                {% for new in type2 %}
+				<li>
+					<h4><a href="/user/{{new.id}}">{{new.gname}}</a></h4>
+					<a href="/user/{{new.id}}"><img src="/static/{{new.gpic}}"></a>
+					<div class="prize">¥ {{new.gprice}}</div>
+				</li>
+                {%endfor%}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model04">{{typelist.3}}</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for hot in type33 %}
+				{% if hot.gname|length <= 4 %}
+				<a href="/user/{{hot.id}}">{{hot.gname}}</a>
+				{% else %}
+				<a href="/user/{{hot.id}}">{{hot.gname|slice:"4"}}...</a>
+				{% endif %}
+                {% endfor%}
+			</div>
+			<a href="/user/list4_1_1" class="goods_more fr" id="fruit_more">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner04.jpg"></div>
+			<ul class="goods_list fl">
+                {% for new in type3 %}
+				<li>
+					<h4><a href="/user/{{new.id}}">{{new.gname}}</a></h4>
+					<a href="/user/{{new.id}}"><img src="/static/{{new.gpic}}"></a>
+					<div class="prize">¥ {{new.gprice}}</div>
+				</li>
+                {%endfor%}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model05">{{typelist.4}}</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for hot in type44 %}
+				{% if hot.gname|length <= 4 %}
+				<a href="/user/{{hot.id}}">{{hot.gname}}</a>
+				{% else %}
+				<a href="/user/{{hot.id}}">{{hot.gname|slice:"4"}}...</a>
+				{% endif %}
+                {% endfor%}
+			</div>
+			<a href="/user/list5_1_1" class="goods_more fr" id="fruit_more">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner05.jpg"></div>
+			<ul class="goods_list fl">
+                {% for new in type4 %}
+				<li>
+					<h4><a href="/user/{{new.id}}">{{new.gname}}</a></h4>
+					<a href="/user/{{new.id}}"><img src="/static/{{new.gpic}}"></a>
+					<div class="prize">¥ {{new.gprice}}</div>
+				</li>
+                {%endfor%}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model06">{{typelist.5}}</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for hot in type55 %}
+				{% if hot.gname|length <= 4 %}
+				<a href="/user/{{hot.id}}">{{hot.gname}}</a>
+				{% else %}
+				<a href="/user/{{hot.id}}">{{hot.gname|slice:"4"}}...</a>
+				{% endif %}
+                {% endfor%}
+			</div>
+			<a href="/user/list6_1_1" class="goods_more fr" id="fruit_more">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner06.jpg"></div>
+			<ul class="goods_list fl">
+                {% for new in type5 %}
+				<li>
+					<h4><a href="/user/{{new.id}}">{{new.gname}}</a></h4>
+					<a href="/user/{{new.id}}"><img src="/static/{{new.gpic}}"></a>
+					<div class="prize">¥ {{new.gprice}}</div>
+				</li>
+                {%endfor%}
+			</ul>
+		</div>
+	</div>
+
+	<!--<script type="text/javascript" src="/static/js/slideshow.js"></script>-->
+	<!--<script type="text/javascript">-->
+		<!--BCSlideshow('focuspic');-->
+		<!--var oFruit = document.getElementById('fruit_more');-->
+		<!--var oShownum = document.getElementById('show_count');-->
+
+		<!--var hasorder = localStorage.getItem('order_finish');-->
+
+		<!--if(hasorder)-->
+		<!--{-->
+			<!--oShownum.innerHTML = '2';-->
+		<!--}-->
+
+		<!--oFruit.onclick = function(){-->
+			<!--window.location.href = 'list.html';-->
+		<!--}-->
+	<!--</script>-->
+{%endblock middle%}

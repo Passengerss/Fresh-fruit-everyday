@@ -1,0 +1,164 @@
+
+{%extends 'base.html'%}
+
+{% block middle %}
+
+	<div class="total_count">全部商品<em>{{cars|length}}</em>件</div>
+	<ul class="cart_list_th clearfix">
+		<li class="col01">商品名称</li>
+		<li class="col02">商品单位</li>
+		<li class="col03">商品价格</li>
+		<li class="col04">数量</li>
+		<li class="col05">小计</li>
+		<li class="col06">操作</li>
+	</ul>
+
+    {% for car_obj in cars %}
+	<ul class="cart_list_td clearfix" id="{{car_obj.id}}">
+		<li class="col01"><input type="checkbox" name="car_obj" checked></li>
+		<li class="col02" ><a href="/user/{{car_obj.goods_id}}"><img src="/static/{{car_obj.goods.gpic}}"></a></li>
+        <li class="col03"><a href="/user/{{car_obj.goods_id}}">{{car_obj.goods.gname}}</a><br><em>{{car_obj.goods.gprice}}元/{{car_obj.goods.gdanwei}}</em></li>
+		<li class="col04">{{car_obj.goods.gdanwei}}</li>
+		<li class="col05">{{car_obj.goods.gprice}}元</li>
+		<li class="col06">
+			<div class="num_add">
+				<a href="javascript:;" class="add fl" >+</a>
+				<input type="text" class="num_show fl" value="{{car_obj.count}}">
+				<a href="javascript:;" class="minus fl">-</a>	
+			</div>
+		</li>
+		<li class="col07">25.80元</li>
+		<li class="col08"><a href="javascript:delete_car({{car_obj.id}});">删除</a></li>
+	</ul>
+    {% endfor %}
+	<ul class="settlements">
+		<li class="col01"><input id="check_all" type="checkbox" name="" checked=""></li>
+		<li class="col02">全选</li>
+		<li class="col03">合计(不含运费)：<span>¥</span><em class="total">--</em><br>共计<b>--</b>件商品</li>
+		<li class="col04"><a href="">去结算</a></li>
+	</ul>
+    <script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+    <script>
+        // 全选、全消
+        $("#check_all").click(function () {
+            var state = $(this).prop("checked");   // 获取当前checkbox 属性，只能使用prop()
+            $(":checkbox:not(#check_all)").prop("checked",state);
+        });
+        // 选择单个时取消全选
+        $(":checkbox:not(#check_all)").click(function () {
+            if($(this).prop("checked") === true){
+                if($(":checked").length+1 === $(":checkbox").length){
+                    $("#check_all").prop("checked",true);
+                }
+            }
+            else{
+                $("#check_all").prop("checked",false); // 取消全选
+            }
+        });
+        // 数量加
+        (function add() {
+            $(".add").click(function () {
+                var number = parseInt($(this).next().val());
+                $(this).next().val(number+1).blur();
+            });
+        })();
+        // 数量减
+        (function reduce() {
+            $(".minus").click(function () {
+                var number = parseInt($(this).prev("input").val());
+                if(number>1){
+                    $(this).prev("input").val(number-1).blur();
+                }
+            });
+        })();
+        // 计算所有商品:小计,合计
+        var sum = (function sum() {
+            var T_number=0;
+            var T_money =0;
+            $("li.col07").each(function () {
+                var count=parseInt($(this).prev().find("input").val());
+                var price = parseFloat($(this).prev().prev().text());
+                var litt_sum = count * price;
+                T_money += litt_sum;
+                T_number++;
+                $(this).html(litt_sum.toFixed(2)+"元");
+            });
+            $("li.col03 b").html(T_number);  // 商品总数量（下方）
+            $("li.col03 em.total").html(T_money.toFixed(2)); // 总金额
+            $(".total_count em").html(T_number);// 商品总数量（上方）
+            return sum;
+        })();
+        // 同步后台数据
+        $(".num_show").blur(function () {
+           var number = $(this).val();
+           if(number>99){
+               alert("最多可购买99件商品！");
+               $(this).focus();
+               $(this).val(99);
+               return;
+           }
+           if(number<0){
+               alert("请输入正整数！");
+               $(this).val(0);
+               $(this).focus();
+               return ;
+           }
+           var car_id = $(this).parents(".cart_list_td").attr("id");
+           $.get('/car/change'+car_id+"_"+number+"/",function (data) {
+               if(data.status === 1){ // 成功
+                   sum();
+//                   alert("修改成功！");
+                    return;
+               }
+               if(data.status === 0){
+                   $(this).val(number);
+               }
+           });
+        });
+        // 删除购物车信息
+        function delete_car(id) {
+            var del = confirm("Are you sure to delete this product?");
+            if(del){
+                $.get("/car/delete"+id,function (data) {
+                    if(data.status === 1){
+                        $("ul").remove("#"+id);
+                        sum();
+                    }
+                });
+            }
+        }
+        // 拼接get请求地址
+		(function get_link() {
+            $(".col04 a").click(function () {
+                // 提交判断,当前页面是否存在物品
+				if($("ul.cart_list_td").length === 0){
+				    alert("请先添加到购物车！");
+				    return;
+				}
+                var link= "car_id=";
+				var list = $("ul.cart_list_td").each(function () {
+                    if($(this).find(".col01 input").prop("checked")===true){    // 是否选中
+                        link += $(this).attr("id")+"&car_id=";
+                    }
+				});
+				$(".col04 a").attr("href","/order/?"+link);
+            })
+        })();
+        // 根据选择调整
+        $("input").on("change",function () {
+            var total=0;
+            var count=0;
+            $("ul.cart_list_td").each(function () {
+                if($(this).find(".col01 input").prop("checked")===true){
+                    little_sum = parseFloat($(this).find(".col07").text());
+                    total += little_sum;
+                    count ++;
+                }
+            });
+            $("li.col03 b").html(count);  // 商品总数量（下方）
+            $("li.col03 em.total").html(total.toFixed(2)); // 总金额
+            $(".total_count em").html(count);// 商品总数量（上方）
+        })
+
+    </script>
+{% endblock middle %}
