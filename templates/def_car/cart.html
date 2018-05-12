@@ -1,6 +1,6 @@
 
 {%extends 'base.html'%}
-
+{% load static %}
 {% block middle %}
 
 	<div class="total_count">全部商品<em>{{cars|length}}</em>件</div>
@@ -16,8 +16,8 @@
     {% for car_obj in cars %}
 	<ul class="cart_list_td clearfix" id="{{car_obj.id}}">
 		<li class="col01"><input type="checkbox" name="car_obj" checked></li>
-		<li class="col02" ><a href="/user/{{car_obj.goods_id}}"><img src="/static/{{car_obj.goods.gpic}}"></a></li>
-        <li class="col03"><a href="/user/{{car_obj.goods_id}}">{{car_obj.goods.gname}}</a><br><em>{{car_obj.goods.gprice}}元/{{car_obj.goods.gdanwei}}</em></li>
+		<li class="col02" ><a href="{% url 'goods:detail' car_obj.goods_id %}"><img src="{% static car_obj.goods.gpic %}"></a></li>
+        <li class="col03"><a href="{% url 'goods:detail' car_obj.goods_id %}">{{car_obj.goods.gname}}</a><br><em>{{car_obj.goods.gprice}}元/{{car_obj.goods.gdanwei}}</em></li>
 		<li class="col04">{{car_obj.goods.gdanwei}}</li>
 		<li class="col05">{{car_obj.goods.gprice}}元</li>
 		<li class="col06">
@@ -37,7 +37,7 @@
 		<li class="col03">合计(不含运费)：<span>¥</span><em class="total">--</em><br>共计<b>--</b>件商品</li>
 		<li class="col04"><a href="">去结算</a></li>
 	</ul>
-    <script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
     <script>
         // 全选、全消
         $("#check_all").click(function () {

@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import *
+from .models import OrderInfo,OrderDetail
 from def_user.models import UserInfo
 from def_car import models
 from django.db import transaction
@@ -48,9 +48,8 @@ def order_handle(request):
         order.address = UserInfo.objects.get(id=uid).uaddress
         order.save()
         # 创建订单详表
-        ids = [item for item in car_ids]
+        ids = [int(item) for item in car_ids]
         for id1 in ids:
-            id1 = int(id1)
             detail = OrderDetail()
             detail.order=order
             # 查询购物车对应id的那一条信息
@@ -68,10 +67,10 @@ def order_handle(request):
                 detail.save()
                 cart.delete()
             else:
-                transaction.savepoint_rollback(tran_id)
-                return  redirect("/car/info/car")
+                transaction.savepoint_rollback(tran_id)# 回滚操作
+                return  redirect("car:car")
         transaction.savepoint_commit(tran_id)
     except Exception as e:
-        print("===============%s"%e)
-        transaction.savepoint_rollback(tran_id)
-    return redirect("/user/info/user_center_order")
+        print("========OrderHandle=======%s"%e)
+        transaction.savepoint_rollback(tran_id)# 回滚操作
+    return redirect("user:user_center_order")

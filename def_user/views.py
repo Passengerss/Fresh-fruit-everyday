@@ -2,6 +2,7 @@
 from django.shortcuts import render,redirect
 from .models import UserInfo
 from hashlib import sha1
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from .user_check import check
 from def_order import models
@@ -17,7 +18,7 @@ def register(request):
 # 退出登录
 def loginout(request):
     request.session.flush( )
-    return redirect('/user/index')
+    return redirect('goods:index')
 
 # 处理注册信息
 def register_handle(request):
@@ -29,7 +30,7 @@ def register_handle(request):
     uemail = post.get("email")
     # 判断两次密码
     if upwd != upwd2:
-        redirect('/user/register')
+        redirect('user:register')
 
     # sha1加密
     s1 = sha1()
@@ -43,7 +44,7 @@ def register_handle(request):
     user.uemail = uemail
     user.save()
     # 注册成功，转到登录页面
-    return redirect('/user/login')
+    return redirect('user:login')
 
 #
 def register_exist(request,username):
@@ -55,7 +56,7 @@ def register_exist(request,username):
 
 
 def login(request):
-    uname = request.COOKIES.get("uname",'')
+    uname = request.COOKIES.get("user_name",'')
     context = {"title":"用户登录","error_name":0,"error_pwd":0,"uname":uname}
     return render(request,'def_user/login.html',context=context)
 
@@ -67,21 +68,21 @@ def login_handle(request):
     remember = request.POST.get("remember",0) # 记住服务为1
     # 根据数据模型查数据，判断登录信息是否正确
     users = UserInfo.objects.filter(uname=uname)
-    #print(uname)
 
     # 如果用户名无错误，则判断密码是否正确
-    if len(users) == 1:
+    if len(users):
         s1 = sha1()
         s1.update(upwd.encode('utf-8'))
         if s1.hexdigest() == users[0].upwd:
+            print("=========================>密码正确")
             # 读取用户开始访问的url
             #success = HttpResponseRedirect(request.COOKIES["url"])
-            success = HttpResponseRedirect("/user/index")   # redirect 不能保存cookies。这个可以
-            # 记住密码
-            if remember != 0:
-                success.set_cookie("uname",uname)
+            success = HttpResponseRedirect(reverse("goods:index",args=()))   # redirect 不能保存cookies。这个可以
+            #记住密码
+            if remember:
+                success.set_cookie(key="user_name",value=uname.encode('utf-8').decode("iso-8859-1"))
             else:
-                success.set_cookie("uname",'',max_age=-1)
+                success.set_cookie("user_name",'',max_age=-1)
             request.session['user_id'] = users[0].id
             request.session['user_name'] = uname
             return  success

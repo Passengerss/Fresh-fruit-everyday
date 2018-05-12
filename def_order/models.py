@@ -17,7 +17,7 @@ class OrderInfo(models.Model):
 # 订单详情
 class OrderDetail(models.Model):
     goods = models.ForeignKey("def_goods.GoodsInfo")
-    order = models.ForeignKey("Orderinfo")
+    order = models.ForeignKey("OrderInfo")
     goods_name = models.CharField(max_length=20)
     goods_price = models.DecimalField(max_digits=5,decimal_places=2)
     goods_count = models.IntegerField()

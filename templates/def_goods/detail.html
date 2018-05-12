@@ -1,6 +1,7 @@
 {%extends 'def_goods/base.html'%}
+{% load static %}
 {%block middle%}
-	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" {% static 'js/jquery-1.12.4.min.js' %}></script>
 	<script type="text/javascript">
 		function add() {
 			var number = parseInt($(".num_show").val());
@@ -67,19 +68,19 @@
 	<div class="navbar_con">
 		<div class="navbar clearfix">
 			<div class="subnav_con fl">
-				<h1>全部商品分类</h1>	
-				<span></span>			
+				<h1>全部商品分类</h1>
+				<span></span>
 				<ul class="subnav">
-					<li><a href="/user/list1_1_1" class="fruit">新鲜水果</a></li>
-					<li><a href="/user/list2_1_1" class="seafood">海鲜水产</a></li>
-					<li><a href="/user/list3_1_1" class="meet">猪牛羊肉</a></li>
-					<li><a href="/user/list4_1_1" class="egg">禽类蛋品</a></li>
-					<li><a href="/user/list5_1_1" class="vegetables">新鲜蔬菜</a></li>
-					<li><a href="/user/list6_1_1" class="ice">速冻食品</a></li>
+					<li><a href="{% url 'goods:list' 1 1 1 %}" class="fruit">新鲜水果</a></li>
+                    <li><a href="{% url 'goods:list' 2 1 1 %}" class="seafood">海鲜水产</a></li>
+                    <li><a href="{% url 'goods:list' 3 1 1 %}" class="meet">猪牛羊肉</a></li>
+                    <li><a href="{% url 'goods:list' 4 1 1 %}" class="egg">禽类蛋品</a></li>
+                    <li><a href="{% url 'goods:list' 5 1 1 %}" class="vegetables">新鲜蔬菜</a></li>
+                    <li><a href="{% url 'goods:list' 6 1 1 %}" class="ice">速冻食品</a></li>
 				</ul>
 			</div>
 			<ul class="navlist fl">
-				<li><a href="/user/index">首页</a></li>
+				<li><a href="{% url 'goods:index' %}">首页</a></li>
 				<li class="interval">|</li>
 				<li><a href="#">手机生鲜</a></li>
 				<li class="interval">|</li>
@@ -89,15 +90,15 @@
 	</div>
 
 	<div class="breadcrumb">
-		<a href="/user/index">全部分类</a>
+		<a href="{% url 'goods:index' %}">全部分类</a>
 		<span>></span>
-		<a href="/user/list{{goods.gtype.id}}_1_1">{{ttitle}}</a>
+		<a href="{% url 'goods:list' goods.gtype.id 1 1 %}">{{ttitle}}</a>
 		<span>></span>
 		<a href="">商品详情</a>
 	</div>
 
 	<div class="goods_detail_con clearfix">
-		<div class="goods_detail_pic fl" ><img src="/static/{{goods.gpic}}" style="width: 360px;height: 360px;"></div>
+		<div class="goods_detail_pic fl" ><img src="{% static goods.gpic %}" style="width: 360px;height: 360px;"></div>
 
 		<div class="goods_detail_list fr">
 			<h3>{{goods.gname}}</h3>
@@ -130,7 +131,7 @@
 				<ul>
 					{% for each in news %}
 					<li>
-						<a href="/user/{{each.id}}"><img src="/static/{{each.gpic}}"></a>
+						<a href="{% url 'goods:detail' each.id %}"><img src="{% static each.gpic %}"></a>
 						<h4><a href="#">{{each.gname}}</a></h4>
 						<div class="prize">￥{{each.gprice}}</div>
 					</li>
@@ -164,15 +165,16 @@
 
 	<div class="add_jump"></div>
 
-	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}" ></script>
 	<script type="text/javascript">
+
 		var $add_x = $('#add_cart').offset().top;
 		var $add_y = $('#add_cart').offset().left;
 
 		var $to_x = $('#show_count').offset().top;
 		var $to_y = $('#show_count').offset().left;
 
-		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'});
+		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':"block"});
 
 		$('#add_cart').click(function(){
             if($(".login_btn").attr("title")==="success"){
@@ -216,7 +218,7 @@
         $(".buy_btn").click(function () {
             num = parseInt($(".num_show").val());
 			$.get("/car/add_to_car{{goods.id}}_" + num,function () {
-				location.href = "/car/info/car/";
+				location.href = "{% url 'car:car' %}";
             })
         })
 

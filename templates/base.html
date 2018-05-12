@@ -1,5 +1,5 @@
 {%extends 'base_foot.html'%}
-
+{% load static %}
 {% block body%}
     <div class="header_con">
 		<div class="header">
@@ -9,33 +9,33 @@
                 <div class="login_btn fl" title="success">
 					欢迎您：<em>{{request.session.user_name}}</em>
 					<span>|</span>
-					<a href="/user/loginout">退出</a>
+					<a href="{% url 'user:loginout' %}">退出</a>
 				</div>
                 {% else %}
 				<div class="login_btn fl" title="failed">
-					<a href="/user/login">请登录</a>
+					<a href="{% url 'user:login' %}">请登录</a>
 					<span>|</span>
-					<a href="/user/register">注册</a>
+					<a href="{% url 'user:register' %}">注册</a>
 				</div>
                 {% endif %}
 
 				<div class="user_link fl">
 					<span>|</span>
-					<a href="/user/info">用户中心</a>
+					<a href="{% url 'user:user_center_info' %}">用户中心</a>
 					<span>|</span>
 					<a href="{% url "car:car" %}">我的购物车</a>
 					<span>|</span>
-					<a href="/user/info/user_center_order.html">我的订单</a>
+					<a href="{% url 'user:user_center_order' %}">我的订单</a>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<div class="search_bar clearfix">
-		<a href="/user/index.html" class="logo fl"><img src="/static/images/logo.png"></a>
+		<a href="{% url 'goods:index' %}" class="logo fl"><img src="{% static 'images/logo.png' %}"></a>
 		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
 		<div class="search_con fr">
-			<form action="/user/search/" method="get" target="_blank">
+			<form action="{% url 'goods:search' %}" method="get" target="_blank">
 			<input type="text" class="input_text fl" name="q" placeholder="搜索商品">
 			<input type="submit" class="input_btn fr" value="搜索" >
             </form>
